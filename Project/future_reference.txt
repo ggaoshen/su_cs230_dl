@@ -1,0 +1,3 @@
+https://keon.io/deep-q-learning/
+python 2: https://github.com/edwardhdlu/q-trader
+https://github.com/saeed349/Deep-Reinforcement-Learning-in-Trading
