@@ -13,7 +13,14 @@ __keras tuner__
 
 __t-SNE__
 * https://distill.pub/2016/misread-tsne/
+* https://www.thetalkingmachines.com/episodes/automatic-translation-and-t-sne?context_entity_type=node&context_entity_id=17703
 
 __stanford class ranking, get sense of effort and difficulty__
 * https://carta.stanford.edu/welcome_to_carta
 
+__SEARCHING FOR ACTIVATION FUNCTIONS__
+https://arxiv.org/pdf/1710.05941.pdf
+
+__Botzman machines__
+* talking machines podcast: https://www.thetalkingmachines.com/episodes/eric-lander-and-restricted-boltzmann-machines?context_entity_type=node&context_entity_id=17700
+* https://www.cs.toronto.edu/~fritz/absps/reluICML.pdf
