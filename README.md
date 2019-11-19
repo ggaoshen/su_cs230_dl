@@ -1,2 +1,2 @@
-# Stanford_CS230_DL
- stanford deep learning class
+# su_cs230_dl
+ stanford cs230 deep learning
