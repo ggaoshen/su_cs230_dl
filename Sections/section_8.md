@@ -13,3 +13,7 @@ for writing paper/Latex rendering
 __Visualizing NN__
 - netron
 
+__ML model is Javascript__
+Tensorflow.js
+https://www.tensorflow.org/js
+https://experiments.withgoogle.com/experiments?tag=Tensorflow.js
