@@ -9,11 +9,19 @@ computingwithdata
 __Openleaf/shareLaTex__
 for writing paper/Latex rendering
 - https://www.overleaf.com/project/59152b56ade73bf7571c616e
+- \usepackage[final, nonatbib]{nips_2018}
+- \usepackage{biblatex}
+- cite IPython, nlpk, toolkit like @online{sox, year=2015, urldate, blah....}
 
 __Visualizing NN__
 - netron
+- https://github.com/HarisIqbal88/PlotNeuralNet
+- http://alexlenail.me/NN-SVG/LeNet.html
 
 __ML model is Javascript__
 Tensorflow.js
-https://www.tensorflow.org/js
-https://experiments.withgoogle.com/experiments?tag=Tensorflow.js
+- https://www.tensorflow.org/js
+- https://experiments.withgoogle.com/experiments?tag=Tensorflow.js
+
+__Stanford login for papers__
+- Ezproxy on stanford
