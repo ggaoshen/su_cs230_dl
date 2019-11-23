@@ -30,5 +30,6 @@ __Stanford Courses__
 - 221: AI: very broad intro to AI
 - 229: ML: very deep, heavy on the math
 - 230: DL
+- 231: CNNs (image)
 - 224: NLP
 - X224: X-classes: no attendence, all virtual, cheaper as well ($1600)
