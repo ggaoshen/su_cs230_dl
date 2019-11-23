@@ -1,0 +1,71 @@
+00:23:53	mohamed mahmoud:	We have a record of last week’s: https://stanford.zoom.us/recording/share/xIK400fLYq3DqvinxEbP2C_8KVzjiTOL07cp2yh2BimwIumekTziMw
+00:26:19	Alp Kutlualp:	Hi just joined
+00:26:22	Alp Kutlualp:	Sorry for the delay
+00:36:44	michaelhu:	Will the link to this session recording be on piazza?
+00:41:22	Steven Das:	Number of open issues
+00:41:25	Steven Das:	E.g., bug reports
+00:42:12	Steven Das:	Whether or not the repo has a corresponding package on PyPi or some other major package repository.
+00:43:37	Alp Kutlualp:	Could you show where to look for the licenses again?
+00:44:18	Alp Kutlualp:	Got it, thank you.
+00:44:34	Alp Kutlualp:	Hahaha
+00:45:59	mohamed mahmoud:	https://tldrlegal.com/license/gnu-affero-general-public-license-v3-(agpl-3.0)
+00:48:08	Jorge:	Mohamed, could you share the website where people share code that reproduces the results of a paper?
+00:51:55	Jorge:	Worked for me
+00:52:09	Jorge:	although the results aren’t great
+00:52:14	Jorge:	I ran it for 100 iterations
+00:52:58	Hrushikesh:	where do i download vgg model?
+00:53:40	Hrushikesh:	thanks
+00:53:45	viveak:	are you sharing the screen?
+00:54:28	viveak:	sorry, I can see now
+00:58:07	Hrushikesh:	should we use Stanford email address?
+01:01:25	Jorge:	Will we be charged for using the GPU today?
+01:01:36	Jorge:	Or can we apply AWS credits?
+01:02:35	Alp Kutlualp:	Friday :)
+01:02:49	Alp Kutlualp:	$TGIF
+01:02:52	Alp Kutlualp:	#TGIF
+01:05:18	mohamed mahmoud:	https://paperswithcode.com/
+01:05:27	Jorge:	Thanks!
+01:16:33	adam klein:	how do you open another port exactly?
+01:17:05	adam klein:	thx!
+01:17:15	Alp Kutlualp:	How is the port range decided?
+01:17:29	Anna JING NING:	can we choose a free one for today's class
+01:17:51	Alp Kutlualp:	So we can choose any number for the “port range” field?
+01:18:12	Alp Kutlualp:	Silly question
+01:18:17	Alp Kutlualp:	How did you know it was 9000 for Juopyter
+01:18:22	Alp Kutlualp:	Jupyter*
+01:20:04	anushyas:	Where can you see how much we are paying for this instance?
+01:22:35	Alp Kutlualp:	Are these instructions written anywhere for us to later go on our own?
+01:22:41	Alp Kutlualp:	to* go
+01:23:07	richa rastogi:	Do you have to ssh into the machine or is there any other way to access ec2 ? And do you have to install Jupyter on the ec2 instance ?
+01:25:19	Vivek Gupta:	should be okay to use Azure ?
+01:25:41	Vivek Gupta:	sounds good , thx
+01:25:45	adam klein:	@Alp, some instructions here http://cs230.stanford.edu/section/2/
+01:25:55	Steven Das:	Azure has GPUs too, but your wallet won't like the results without credits. :)
+01:26:11	Vivek Gupta:	I might get the credits and thus the ask ;)
+01:26:11	Chenghao Peng:	If we go over limit, do we get more credit like other courses?
+01:27:05	Alp Kutlualp:	Thank you - sorry just realized they were at the end
+01:29:46	Chenghao Peng:	yes
+01:31:52	Jorge:	I’m getting the following error
+01:31:53	Jorge:	ModuleNotFoundError: No module named 'tensorflow'
+01:32:04	Jorge:	After installing the requirements
+01:34:54	Steven Das:	+1 to using Anaconda to avoid dependency hell
+01:35:16	adam klein:	if you have pre-installed conda environments, you can do ‘conda env list’ and figure one out to activate
+01:35:56	Chenghao Peng:	Are we recommended to use conda?
+01:36:23	Ernesto Evgeniy Sanches Shayda:	On p3.2xlarge instance the default system disk is too small (getting errror No space left on device for pip install). Can I install on the external 75G drive that we have added to the instance?
+01:36:38	Chenghao Peng:	So we can start to work off a blank vm from AWS?
+01:37:53	viveak:	I get an error saying the limit is 0
+01:45:25	Bogdan:	was doing the same thing for me; had to restart the instance
+01:45:47	Bogdan:	took a minute to shutdown
+01:46:08	Visu:	When will the video be posted online? I joined late, and missed most of it.
+01:49:17	adam klein:	just do ‘conda activate tensorflow_py36'
+01:49:19	Steven Das:	conda activate nameofenv
+01:49:25	Steven Das:	conda create --name nameofyourenv
+01:51:08	adam klein:	(sorry, might have been _p36, not _py36, not sure)
+01:56:15	adam klein:	some tips for stop: use ‘u’ for filter by user, ’t’ for tree view, ‘H’ to get rid of threads
+01:56:20	adam klein:	*htop
+01:59:52	adam klein:	+1 for vscode
+02:00:15	Bogdan:	I also use VS Code for LaTeX editing
+02:02:45	Jorge:	Is anyone getting this error: “ERROR: Could not install packages due to an EnvironmentError: [Errno 28] No space left on device"
+02:03:46	Steven Das:	Jorge, how much space is left on your disk?
+02:12:00	Ernesto Evgeniy Sanches Shayda:	Jorge, for disk error you need to increase disk space in AWS console. By default it was 75Gb, need to change to 100+
+02:12:42	Ernesto Evgeniy Sanches Shayda:	One more question ---- how fast is style transfer on your machines on AWS?    I am currently getting --- 2 hours remaining for 1000 iterations.    Perhaps have to change some options to use GPU?
