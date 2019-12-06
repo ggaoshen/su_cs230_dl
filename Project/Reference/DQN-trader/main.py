@@ -3,15 +3,18 @@ from model import Q_Model
 from agent import Agent
 from sequence_generator import Single_Signal_Generator
 from simulator import Simulator
+import pandas as pd
 
 # sampler = Single_Signal_Generator(total_timesteps=180, period_range=(10, 40), amplitude_range=(5, 80), noise_amplitude_ratio=0.5)
 # filename = "Generated Signals.npy"
 # sampler.build_signals(filename, 1000)
 # sampler.load(filename)
-
 # env = Market(sampler=sampler, last_n_timesteps=40, buy_cost=3.3)
-ticker=['AAPL', 'TSLA', 'MS']
-sample = get_ts(ticker)
+
+# ticker=['AAPL', 'TSLA', 'MS']
+# sample = get_ts(ticker)
+# sample.to_csv('test_data.csv')
+sample = pd.read_csv('test_data.csv', index_col=0)
 print(sample.head())
 # print(sample.shape)
 # print(sample.dtypes)
