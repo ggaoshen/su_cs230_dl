@@ -1,15 +1,22 @@
-from environment import Market
+from environment import Market, get_ts
 from model import Q_Model
 from agent import Agent
 from sequence_generator import Single_Signal_Generator
 from simulator import Simulator
 
-sampler = Single_Signal_Generator(total_timesteps=180, period_range=(10, 40), amplitude_range=(5, 80), noise_amplitude_ratio=0.5)
-filename = "Generated Signals.npy"
-sampler.build_signals(filename, 1000)
-sampler.load(filename)
+# sampler = Single_Signal_Generator(total_timesteps=180, period_range=(10, 40), amplitude_range=(5, 80), noise_amplitude_ratio=0.5)
+# filename = "Generated Signals.npy"
+# sampler.build_signals(filename, 1000)
+# sampler.load(filename)
 
-env = Market(sampler=sampler, last_n_timesteps=40, buy_cost=3.3)
+# env = Market(sampler=sampler, last_n_timesteps=40, buy_cost=3.3)
+ticker=['AAPL', 'TSLA', 'MS']
+sample = get_ts(ticker)
+print(sample.head())
+# print(sample.shape)
+# print(sample.dtypes)
+env = Market(sample, 20, 3.3)
+# env.reset()
 
 dense_model = [
     {"type":"Reshape", "target_shape":(env.get_state().shape[0]*env.get_state().shape[1],)},
@@ -40,12 +47,12 @@ lstm_model = [
 ]
 
 q_model = Q_Model("GRU", state_dim=env.get_state().shape, no_of_actions=env.no_of_actions, layers=dense_model, hyperparameters={"lr":0.0001})
-agent = Agent(q_model, batch_size=8, discount_factor=0.8, epsilon=1)
+agent = Agent(q_model, batch_size=8, discount_factor=0.995, epsilon=0.5)
 
 no_of_episodes_train = 100
 no_of_episodes_test = 100
 
 sim = Simulator(env, agent)
 sim.train(no_of_episodes_train, epsilon_decay=0.997)
-agent.model.save()
+# agent.model.save()
 sim.test(no_of_episodes_test)

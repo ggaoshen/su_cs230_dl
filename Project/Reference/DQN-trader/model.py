@@ -29,13 +29,16 @@ class Q_Model():
                 model.add(self._get_layer(layer, input_shape=self.state_dim))
             elif i == len(layers)-1:
                 model.add(self._get_layer(layer))
-                model.add(self._get_layer(output_shape=self.no_of_actions))
+                model.add(self._get_layer(output_shape=self.no_of_actions * self.state_dim[1])) # model output is flattened
+                # if self.state_dim[1] > 1: 
+                #     model.add(Reshape(target_shape=(self.no_of_actions, self.state_dim[1]), input_shape=(self.no_of_actions * self.state_dim[1], ) )) # model output is flattened
             else:
                 model.add(self._get_layer(layer))
 
         model.compile(loss='mse', optimizer=Adam(lr=hyperparameters['lr']))
         self.model = model
         self.details = self._make_details(layers, hyperparameters)
+        model.summary()
 
     def _get_layer(self, layer=None, input_shape=None, output_shape=None):
 
@@ -54,7 +57,10 @@ class Q_Model():
                 sys.exit()
 
         elif output_shape:
+            # if output_shape > self.no_of_actions: # in case of multi-stock inputs, output_shape is multiple of no_of_acitons. need to reshape
             return Dense(units=output_shape, activation="linear")
+            # else: 
+            #     return Dense(units=output_shape, activation="linear")
 
         else:
             if layer["type"] == "Dense":
@@ -100,10 +106,14 @@ class Q_Model():
         return details
 
     def fit(self, state, action, q_values):
-        q = self.predict(add_dim(state, self.state_dim))[0]
-        q[action] = q_values
+        # print('action dims:', len(action))
+        # print('q_values dims:', q_values)
+        q_hat = self.predict(add_dim(state, self.state_dim))[0] # q_hat: 1 X (self.no_of_actions * self.state_dim[1])
+        q_hat = q_hat.reshape((self.no_of_actions, self.state_dim[1]))
+        for stock_i, action_for_stock_i in enumerate(action):
+            q_hat[action_for_stock_i, stock_i] = q_values
 
-        self.model.fit(add_dim(state, self.state_dim), add_dim(q, (self.no_of_actions,)), epochs=1, verbose=0)
+        self.model.fit(add_dim(state, self.state_dim), add_dim(q_hat, (self.no_of_actions * self.state_dim[1], )), epochs=1, verbose=0) # actual keras model.fit
 
     def predict(self, state):
         return self.model.predict(add_dim(state, self.state_dim))
