@@ -54,3 +54,7 @@ Copy/paste this URL into your browser when you connect for the first time,
 ## installing other dependencies
 - install git on ubuntu
 sudo apt install git-all
+
+## monitor resources
+- htop (cpu usage)
+- nvidia-smi or watch -n0.5 nvidia-smi for 0.5s refresh (gpu usage)
