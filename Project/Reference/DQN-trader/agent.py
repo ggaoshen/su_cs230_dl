@@ -32,7 +32,7 @@ class Agent:
         for state, action, reward, next_state, done in batch:
             q = reward
             if not done:
-                q += self.discount_factor * np.nanmax(self._get_q_valid(next_state))
+                q += self.discount_factor * np.nanmax(self._get_q_valid(next_state), axis=0)
             self.model.fit(state, action, q)
 
     def save_model(self):

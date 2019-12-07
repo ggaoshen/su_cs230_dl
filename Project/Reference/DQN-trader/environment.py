@@ -40,16 +40,16 @@ def get_ts(ticker, tick='batch_daily_adjusted', dropna=True):
 
 class Market:
 
-    def __init__(self, data, last_n_timesteps, buy_cost, risk_averse=0.1):
+    def __init__(self, data, last_n_timesteps, buy_cost, risk_averse=0.05):
         
         self.no_of_actions = 5 # buy 50, buy 10, hold, sell 10, sell 50
         self.action_quantities = np.array([50, 10, 0, -10, -50])
         self.action_labels = ["buy 50", "buy 10", "hold", "sell 10", "sell 50"]
-        # self.max_position = 10 # max number of shares can hold given stock
-        # self.min_position = 0 # min number of shares can hold given stock
+        self.max_position = 50 # max number of shares can hold given stock
+        self.min_position = -20 # min number of shares can hold given stock
         self.positions = np.zeros((data.shape[0]+1, data.shape[1])) # add initial position at t0, non-cash poositions are in number of shares
-        self.cash_positions = np.zeros((data.shape[0]+1, 1)) # cash positions in $
-        self.cash_positions[0] = 1000000 # initial cash position
+        # self.cash_positions = np.zeros((data.shape[0]+1, 1)) # cash positions in $
+        # self.cash_positions[0] = 1000000 # initial cash position
         self.data = data.values
         self.tickers = data.columns
         self.valid_actions = self.get_actions() # list of possible actions e.g. [0,1,2,3,4]
@@ -58,6 +58,7 @@ class Market:
         self.risk_averse = risk_averse
         self.state_shape = (last_n_timesteps, data.shape[1]) # # of stock price ts, position history
         self.portfolio_value = np.zeros((data.shape[0]+1, 1)) # portfolio return, portfolio risk as states
+        self.portfolio_value[0] = 1000000 # initial portfolio value in cash
         self.start_index = last_n_timesteps - 1
         self.current_index = self.start_index
         self.last_index = None
@@ -96,23 +97,38 @@ class Market:
         return np.array([self.action_quantities[action_for_stock_i] for action_for_stock_i in action])
 
     def get_reward(self, action):
-        # update positions
+        # calculate trades and update positions
         trades = self.get_trades(action) # get trades (list of change in shares for each stock)
-        # price_change = self.sample_2d[self.current_index+1, :] - self.sample_2d[self.current_index, :]
         self.positions[self.current_index+2, :] = self.positions[self.current_index+1, :] + trades
-        self.cash_positions[self.current_index+2, 0] = self.cash_positions[self.current_index+1, 0] + np.inner(trades * -1, self.sample_2d[self.current_index+1, :])
+
+        # prune trades based on trading limits
+        self.positions[self.current_index+2, :] = np.clip(self.positions[self.current_index+2, :], self.min_position, self.max_position)
+        # print('positions t+2', self.positions[self.current_index+2, :])
+        trades_pruned = self.positions[self.current_index+2, :] - self.positions[self.current_index+1, :] # revised trades
+        # print('trades_pruned', trades_pruned)
+        # self.cash_positions[self.current_index+2, 0] = self.cash_positions[self.current_index+1, 0] + np.inner(trades_pruned * -1, self.sample_2d[self.current_index+1, :])
 
         # calculate reward (change in portfolio value)
-        self.portfolio_value[self.current_index+2, 0] = np.inner(self.sample_2d[self.current_index+1, :], self.positions[self.current_index+2, :]) - np.inner(self.sample_2d[self.current_index, :], self.positions[self.current_index+1, :]) # total asset mv change as reward
-        self.portfolio_value[self.current_index+2, 0] += self.cash_positions[self.current_index+2, 0] - self.cash_positions[self.current_index+1, 0] # adding change of cash s.t. reward reflect overall portfolio pnl
-        reward = self.portfolio_value[self.current_index+2, 0] - self.portfolio_value[self.current_index+1, 0] # reward is total portfolio pnl
-        reward -= np.sum(np.abs(trades)) * self.buy_cost         # apply transaction cost. assuming buy and sell have similar market impact
+        # self.portfolio_value[self.current_index+2, 0] = np.inner(self.sample_2d[self.current_index+1, :], self.positions[self.current_index+2, :]) - np.inner(self.sample_2d[self.current_index, :], self.positions[self.current_index+1, :]) # total asset mv change as reward
+        # self.portfolio_value[self.current_index+2, 0] += self.cash_positions[self.current_index+2, 0] - self.cash_positions[self.current_index+1, 0] # adding change of cash s.t. reward reflect overall portfolio pnl
+        # reward = self.portfolio_value[self.current_index+2, 0] - self.portfolio_value[self.current_index+1, 0] # reward is total portfolio pnl
+        # reward -= np.sum(np.abs(trades_pruned)) * self.buy_cost         # apply transaction cost. assuming buy and sell have similar market impact
 
-        assert reward != 0
+        reward = (self.sample_2d[self.current_index+1, :] - self.sample_2d[self.current_index, :]) * self.positions[self.current_index+1, :] # reward by asset
+        # print('reward', reward)
+        reward -= np.abs(trades_pruned) * self.buy_cost # reduce reward by transaction cost 
+        # print('reward', reward)
+        # print(self.portfolio_value[self.current_index+1, 0])
+        self.portfolio_value[self.current_index+2, 0] = self.portfolio_value[self.current_index+1, 0] + np.sum(reward)
+        # print(self.portfolio_value[self.current_index+2, 0])
+        # trades_pruned * -1 * self.sample_2d[self.current_index+1, :] # cash change resulted from trading
+        # reward += self.sample_2d[self.current_index+1, :], self.positions[self.current_index+2, :] - self.sample_2d[self.current_index, :], self.positions[self.current_index+1, :] # asset position mv change
 
-        # add risk aversion
-        if reward < 0:
-            reward *= (1. + self.risk_averse)
+        # assert len(reward) == len(self.tickers)
+
+        # # add risk aversion
+        # if reward < 0:
+        #     reward *= (1. + self.risk_averse)
 
         return reward
 

@@ -109,9 +109,9 @@ class Q_Model():
         # print('action dims:', len(action))
         # print('q_values dims:', q_values)
         q_hat = self.predict(add_dim(state, self.state_dim))[0] # q_hat: 1 X (self.no_of_actions * self.state_dim[1])
-        q_hat = q_hat.reshape((self.no_of_actions, self.state_dim[1]))
+        q_hat = q_hat.reshape((self.no_of_actions, self.state_dim[1])) # reshape q_hat: self.no_of_actions X self.state_dim[1]
         for stock_i, action_for_stock_i in enumerate(action):
-            q_hat[action_for_stock_i, stock_i] = q_values
+            q_hat[action_for_stock_i, stock_i] = q_values[stock_i]
 
         self.model.fit(add_dim(state, self.state_dim), add_dim(q_hat, (self.no_of_actions * self.state_dim[1], )), epochs=1, verbose=0) # actual keras model.fit
 

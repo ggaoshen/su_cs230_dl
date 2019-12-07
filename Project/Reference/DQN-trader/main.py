@@ -49,11 +49,11 @@ lstm_model = [
     {"type":"Dense", "units":16, "activation":"relu"}
 ]
 
-q_model = Q_Model("GRU", state_dim=env.get_state().shape, no_of_actions=env.no_of_actions, layers=dense_model, hyperparameters={"lr":0.0001})
+q_model = Q_Model("GRU", state_dim=env.get_state().shape, no_of_actions=env.no_of_actions, layers=gru_model, hyperparameters={"lr":0.0001})
 agent = Agent(q_model, batch_size=8, discount_factor=0.995, epsilon=0.5)
 
-no_of_episodes_train = 100
-no_of_episodes_test = 100
+no_of_episodes_train = 10
+no_of_episodes_test = 1
 
 sim = Simulator(env, agent)
 sim.train(no_of_episodes_train, epsilon_decay=0.997)
