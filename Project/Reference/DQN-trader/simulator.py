@@ -60,17 +60,17 @@ class Simulator:
             if epsilon > min_epsilon:
                 epsilon *= epsilon_decay
 
-            if episode_no % progress_report == 0:
-                fig = plt.figure()
-                ax1 = fig.add_subplot(2, 1, 1)
-                ax1.plot(exploration_episode_rewards, 'red')
-                # ax1.plot(exploration_max_episode_rewards, 'blue')
+            # if episode_no % progress_report == 0:
+            #     fig = plt.figure()
+            #     ax1 = fig.add_subplot(2, 1, 1)
+            #     ax1.plot(exploration_episode_rewards, 'red')
+            #     # ax1.plot(exploration_max_episode_rewards, 'blue')
 
-                ax2 = fig.add_subplot(2, 1, 2)
-                ax2.plot(safe_episode_rewards, 'red')
-                # ax2.plot(safe_max_episode_rewards, 'blue')
+            #     ax2 = fig.add_subplot(2, 1, 2)
+            #     ax2.plot(safe_episode_rewards, 'red')
+            #     # ax2.plot(safe_max_episode_rewards, 'blue')
 
-                fig.savefig('training_progress_' + str(episode_no) + '_episodes.png')
+            #     fig.savefig('training_progress_' + str(episode_no) + '_episodes.png')
 
         fig = plt.figure()
         ax1 = fig.add_subplot(2, 1, 1)
